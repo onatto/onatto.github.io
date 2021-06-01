@@ -1,0 +1,23 @@
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+body { 
+    background-color: black;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+video {
+    float: left;
+    width: 25%;
+    height: 20%;
+    margin: 0px;
+}
+
+video::-webkit-media-controls {
+  display:none !important;
+}
