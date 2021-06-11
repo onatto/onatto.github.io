@@ -21,3 +21,21 @@ video {
 video::-webkit-media-controls {
   display:none !important;
 }
+
+.r1 {
+    transform: rotateY(180deg);
+    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+    -moz-transform:rotateY(180deg); /* Firefox */
+}
+
+.r2 {
+    transform: rotateX(180deg);
+    -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+    -moz-transform:rotateX(180deg); /* Firefox */
+}
+
+.r3 {
+    transform: rotateY(180deg) rotateX(180deg);
+    -webkit-transform: rotateY(180deg) rotateX(180deg);
+    -moz-transform: rotateY(180deg) rotateX(180deg);
+}
