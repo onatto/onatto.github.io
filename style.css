@@ -1,0 +1,17 @@
+body { background-color: #0b0c10;}
+a { font-family: monospace; font-size: 13px; text-decoration: none; color: #d1e8e2;}
+.C0 { font-family: monospace; font-size: 13px; width: 150ch; margin-left : auto; margin-right: auto; height: 60px;}
+.C1 { color: #ffcb9a; font-size: 22px; padding: 10px; float: left; padding-left: 0px;}
+.C2 { font-size: 22px; padding: 10px; display: inline; float: right;}
+.C3 { font-family: monospace; font-size: 13px; color: #ffcb9a; width: 150ch; margin-left : auto; margin-right: auto;}
+.C4 { font-size: 22px; padding: 10px; margin-left : 5px; margin-right: 5px;}
+.C5 { list-style-type: none; line-height: 150%;}
+.C6 { color: #ffcb9a; font-size: 22px; padding: 10px; float: left; padding-left: 0px;}
+h2 { color: #d1e8e2; font-family: monospace; font-size: 13px; font-size: 20px;}
+video { margin-top: 5px; border-radius: 10px;}
+.C10 { display: flex; justify-content: center; align-items: center; flex-wrap: wrap;}
+img { margin-top: 5px; margin-bottom: 5px;}
+.C11 { width: 25%;}
+li > b{ font-weight: 800; color: #116466;}
+.inl{ width: 50%;}
+center { margin-top: 15px; margin-bottom: 15px;}

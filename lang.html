@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<title>The Last Forthwright</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class='C0'><div class='C6'>The Last Forthwright</div>
+<div class='C2'><a class='C4' href="index.html">Home</a>
+<a class='C4' href="lang.html">Language</a>
+<a class='C4' href="journey.html">Journey</a>
+<a class='C4' href="videos.html">Art</a>
+<a class='C4' href="blog.html">Blog</a>
+</div>
+</div>
+<div class='C3'><h2>The Kyra Language </h2>
+<div class='C3'><pre>Kyra is an avant-garde concatenative language, built with entirely different principles from status quo and other forth-like languages.
+The language is incredibly efficient for those who know how to wield it, I really can't go back to coding in C-like for personal stuff anymore.
+It's a foundational meta-language built from first-principles, doesn't make any assumptions about runtime or the problems it solves.
+It molds into whatever language needs to exist to solve given problems freely and usually much more efficiently than in other languages.
+It builds on a simple design I got inspired from Timothy Lottes, an enigmatic legendary coder who understood Forth philosophy more than any.
+
+The core idea is to invent new 'languages' to generate whatever we need to solve the problem at hand.
+Concatenative nature lets compose words naturally, can invent a comfortable language whatever the problem is.
+
+Programming is still stuck with cruft of the old, while having long forgotten important wisdom of the old, namely the <a href='https://wiki.c2.com/?ForthLanguage'><b>Forth</b></a> philosophy.
+This philosophy piqued my curiousity around 2017, I didn't understand it fully until I built and coded a lot in Kyra. 
+I don't think most people who've coded in Forth understand it either.
+They're either thinking too complex from implementation or philosophy perspective, mostly stuck in dogma from the past.
+
+Coming from the C paradigm, coding freeform like this without any rules is already hard, it's especially hard without a proper IDE.
+It's also quite unsafe, no types, no safety-belts, which are unnecessary anyway, although the world disagrees with this.
+
+The compiler is implemented in <b>1800 bytes of x64 assembly</b>, rest of the IDE is written in C, soon to be bootstrapped.
+The editor uses compute-only Vulkan with <a href='stuff/gpa.png'><b>GPA</b></a> profiling for AMD, utilizing <a href='https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VK_KHR_buffer_device_address.html'><b>GPU pointers</b></a> and <a href='https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VK_EXT_descriptor_indexing.html'><b>bindless</b></a>.
+
+<center><a href='stuff/html.png'><img class='inl' src='stuff/html.png'></img></a><div>Even this sites HTML/CSS is defined/generated in Kyra</div></center>
+<center><a href='stuff/markdown.png'><img class='inl' src='stuff/markdown.png'></img></a><div>Custom Markdown-like lite language for content, freeform, parsed in Kyra generating HTML</div></center>
+</pre>
+</div>
+<h2>Conciseness/Expressivity </h2>
+<div class='C3'><pre>The language lets writing code as concise as possible from scratch, usually much more so than other languages.
+Here's some figures for a codebase totalling 4K lines of code, no cheating via external/stdlib code:
+
+- Complete x64 assembler, fastest in the world, <b>in only 192 lines</b> 
+    - All base instructions, all SSE instructions without VEX-prefix, all addressing modes including RIP-relative
+    - Tiny in size, generated <b>194 instructions/756 bytes of x64 code</b> + <b>3KB for instruction descriptor tables</b>
+    - Hyper-optimized, millions of instructions generated per second per core
+        - Ryzen5900HX @3.6Ghz: <b>180M instr/second/core</b> 
+        - Ryzen1700X  @3.4Ghz: <b>105M instr/second/core</b> 
+        - Ryzen2500U  @2.0Ghz: <b>80M  instr/second/core</b> 
+- Compute-only SPIRV assembler with type checking and swizzles <b>in 768 lines</b>, rust-gpu is <b>23k lines</b> in comparison
+    - Compiling shaders in <b><5ms (cached, mostly driver validation overhead)</b> by generating SPIR-V fed to the driver directly
+      This bypasses <b>glslang > file.out > hotload > fread > driver overhead entirely</b>, which is ~100x faster.
+- <b>Line-based SDF font renderer 128 lines</b>, <a href='stuff/rdna.png'><b>custom font definition in 192 lines</b></a>.
+- <a href='stuff/html.png'><b>HTML/CSS language</b></a> which this site is generated in, totaling <b>448 lines</b> along with a simple markdown-like format
+    - Building this whole site takes <b><10ms</b>, most of it spent on file I/O
+- <a href='videos.html'><b>Self-Gravitational Spin Systems</b></a> in <b>256 lines</b> defining 4 shaders
+</pre>
+</div>
+<h2>Instant Iteration </h2>
+<div class='C3'><pre><b>Ideally everything should be instant:</b> compiling, editing, testing, visualization, debugging, intellisense... 
+
+Currently my code compiles around <b>1-2 ms</b> unless I'm dealing with external code such as the Vulkan driver or Capstone.
+Less than 10ms iteration times(less than a frame) makes even 1 second feel like an eternity.
+Instead of taking large steps, I take small steps which leads to a lot less bugs with instant testing.
+
+I once had compiles go up to 5ms, profiled to understand why(thousand paper cuts), then optimized it back to 1ms in assembly.
+This might seem extreme but performance regressions are cumulative, they're best profiled, understood and solved when they surface.
+So when I see other languages compiling in seconds up to a minute I feel sad that no one thinks this is a big problem.
+As usual with the attitude of programmers towards performance, compile-time performance too gets swept under the rug to be solved later.
+Which is the worst time to solve this problem because you're left speculating where the papercuts may be after big offenders are gone.
+
+Actually even 1ms is relatively long, in the next iteration of the language I plan to bring this down to sub-millisecond range.
+</pre>
+</div>
+<h2>Performance/Optimizability </h2>
+<div class='C3'><pre>Optimal performance means squeezing every bit of given hardware instead of relying on compilers to generate good code.
+
+Optimal performance everywhere doesn't matter when most code will be cold, so we can afford to generate less than optimal code.
+When code is hot, we need to be consistently reason about the generated code instead of having to check if compiler is being stupid.
+
+I eventually figured out optimal performance from a high-level representation is essentially impossible, it's literally an AI problem.
+No compiler can hope to write generate as good as handwritten assembly by a coder who knows what they're doing in total control.
+What matters is that <b>code remains optimizable</b> instead of magic optimizations applied everywhere, <b>I want less magic, more control/optimizability</b>.
+
+Optimal register allocation across functions is unnecesarily complex and unreliable, <b>a human mind can do this way better and reliable than a compiler</b>.
+Trying to be optimal regarding spills(3ns each) here and there won't help performance unless that code is hot.
+Although thousand paper cuts kills performance real quick, it's bad to be equally slow everywhere, like having a stack machine or garbage collection.
+</pre>
+</div>
+<h2>Profiling </h2>
+<div class='C3'><pre>Crucial to performance, we need to be able to profile a section or entirety of our codebase, continously and instantly within the IDE.
+Continous profiling is especially crucial to track down performance regressions instead of trying to fix them later.
+I use inline <a href='https://www.felixcloutier.com/x86/rdtsc'><b>RDTSC</b></a> for extreme fine-grained CPU profiling, <a href='https://github.com/floooh/sokol/blob/master/sokol_time.h'><b>sokol_time</b></a> is quite nice/minimal for coarse-grained.
+I've got <a href='stuff/gpa.png'><b>integrated GPU profiling</b></a> via <a href='https://github.com/GPUOpen-Tools/gpu_performance_api'><b>AMD GPA</b></a>.
+Also examining <a href='stuff/rdna.png'><b>generated GPU assembly</b></a> is illuminating both for performance, debugging or getting angry at compilers shipped in drivers.
+</pre>
+</div>
+<h2>Crash Resilience </h2>
+<div class='C3'><pre>Integrating the IDE and the app into a single program for instant-iteration is great until you hard-crash, which breaks the flow.
+With crash-resilence the IDE not only survives the (soft)crash but also gives a full callstack.
+This is especially necessary for environments like in VR where a crash is catastrophic, restart takes longer than desktop.
+</pre>
+</div>
+<h2>Debuggability </h2>
+<div class='C3'><pre>Instant iteration makes debugging mostly trivial when workflow is making small changes followed by testing immediately.
+There can be only few things going wrong with this kind of workflow, it works out quite well so I don't need much debugging.
+Although sometimes things will go wrong and even with crash-resilience the IDE crashes. 
+This isn't too bad as it takes <1s to restart, still somewhat annoying once I've gotten used to not hard-crashing at all. 
+The debugger is still in research, I'll probably eventually write an external debugger, didn't have to so far.
+Need disassembly+register dump for the crash site, that mostly gives enough of an idea how things have gone wrong.
+</pre>
+</div>
+<h2>Visulization </h2>
+<div class='C3'><pre>Visualization is fundamental, before any output happens we've no idea whether the code we've written actually works.
+A lot of the time in programming is spent on writing printfs just so we can understand what is going on.
+With instant-iteration, having a few words which help with visualisation is good enough but this kind of UX can be vastly improved.
+I still haven't implemented the ultimate immediate no-code visualization yet, I have a few approaches for the next iteration. 
+</pre>
+</div>
+<h2>Navigability </h2>
+<div class='C3'><pre>Also called 'intellisense', I can jump instantly to the definition and occurances of a word/variable, solved elegantly requiring minimal energy.
+I can even visualize with a single word in which order given words are executed, quite handy and lacking in other languages.
+However, I don't have code completion because it's not needed when most words are quite short.
+</pre>
+</div>
+<h2>Version Control </h2>
+<div class='C3'><pre>The current IDE features custom builtin version control with up to 512 undo/redos for each version, no merge, single branch, quite good for a single developer.
+I've got a few ideas for a version control system that works with multiple developers, no time or need to implement it yet.
+</pre>
+</div>
+</div>
+</body>
+</html>
