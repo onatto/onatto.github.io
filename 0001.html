@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<title>The Last Forthwright</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class='C0'><div class='C6'>The Last Forthwright</div>
+<div class='C2'><a class='C4' href="index.html">Home</a>
+<a class='C4' href="lang.html">Language</a>
+<a class='C4' href="journey.html">Journey</a>
+<a class='C4' href="videos.html">Art</a>
+<a class='C4' href="blog.html">Blog</a>
+</div>
+</div>
+<div class='C3'><div class='C12'>09/03/2022</div>
+<h2>Saturated math on x64 </h2>
+<pre>Sometimes we want to change a variable with saturation(min,max), usually with counters:
+Usually min is 0 and max is some positive integer.
+
+Decrement can be optimized into:
+<code>
+ sub eax,1
+ adc eax,0
+</code>
+
+If max is a power-of-two, increment/add can be optimized as:
+<code>
+ inc eax
+ and eax,max-1
+</code>
+
+Subtracting arbitrary values with min=0 work without the additional compare
+<code>
+ sub eax,n
+ jc .over
+ mov eax,0
+.over:
+</code>
+
+Addition still needs that extra compare if max isn't a power-of-two
+<code>
+ add eax,n
+ cmp eax,max
+ jl .over
+ mov eax,max
+.over:
+</code>
+</pre>
+</div>
+</body>
+</html>
